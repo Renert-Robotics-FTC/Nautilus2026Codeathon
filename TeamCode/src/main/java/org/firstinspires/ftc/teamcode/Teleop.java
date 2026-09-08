@@ -10,11 +10,11 @@ public class Teleop extends LinearOpMode{
     @Override
     public void runOpMode(){
         //create subsystem objects here
-
+        odo odo = new odo(hardwareMap);
         waitForStart();
 
         while (opModeIsActive()) {
-            //put loop code here
+            odo.update();
         }
 
     }
