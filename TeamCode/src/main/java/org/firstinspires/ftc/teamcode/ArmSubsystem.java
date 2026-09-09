@@ -45,6 +45,7 @@ public void goToNode(){
     //add a derivative to slow it down
     private int previousError;
     private static final double D = 0.001;
+    //
 
     public double getDOutput() {
         int currentError = getError();
