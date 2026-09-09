@@ -49,7 +49,7 @@ public class DriveSubsystem {
         double fieldX = x * cos - y * sin;
         double fieldY = x * sin + y * cos;
 
-        //calculating power for the wheels ig-idk about this
+        //calculating power for the wheels
         double frontRightPower = fieldY - fieldX - turn;
         double frontLeftPower = fieldY + fieldX + turn;
         double backRightPower = fieldY + fieldX - turn;
@@ -79,7 +79,7 @@ public class DriveSubsystem {
         backLeft.setPower(0);
     }
 
-    //reset the things
+    //reset
     public void resetHeading() {
         imu.resetYaw();
     }
