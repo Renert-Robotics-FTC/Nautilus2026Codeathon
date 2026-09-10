@@ -5,7 +5,15 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class ArmSubsystem {
     private DcMotorEx armMotor;
+
+    //Starting to integrate odometry
+    private odo odometry;
+
     public ArmSubsystem(HardwareMap hardwareMap) {
+        armMotor = hardwareMap.get(DcMotorEx.class, "arm");
+        odometry = new odo(hardwareMap);
+
+        // rest of setting up
         armMotor = hardwareMap.get(DcMotorEx.class, "arm");
         armMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         armMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
@@ -18,9 +26,33 @@ public class ArmSubsystem {
         }
 
         private int targetPosition;
+    private static final double TICKS_PER_DEGREE=2000/107;
+    private static final double CORE_X=0;
+    private static final double CORE_Y=0;
+    //Placeholding values because we don't really know the coordinates
     private static final int INTAKE_POSITION=200;
     private static final int NODE_POSITION=900;
+
     //makeshift values
+
+    public int getCoreToTarget(){
+        return (int) (matchAngleToWanted()*TICKS_PER_DEGREE);
+    }
+
+    public double matchAngleToWanted(){
+        double delta_X=CORE_X-odometry.getX();
+        double delta_Y=CORE_Y-odometry.getY();
+        return Math.toDegrees(Math.atan2(delta_Y, delta_X));
+
+    }
+
+    public void aimAtTheCore() {
+        setTargetPosition(getCoreToTarget());
+    }
+
+    public double getTheArmToAngle(){
+        return matchAngleToWanted()-odometry.getHeading();
+    }
 
     public void setTargetPosition(int Position) {
         targetPosition = Position;
