@@ -16,15 +16,17 @@ public class DriveSubsystem {
     private IMU imu;
 
     public DriveSubsystem(HardwareMap hardwareMap) {
+        //connecting each motor to the one on the robot
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
         backRight = hardwareMap.get(DcMotor.class, "backRight");
         backLeft = hardwareMap.get(DcMotor.class, "backLeft");
 
-        //reversing the motors
+        //reversing the right motors so wheels move in the correct direction
         frontRight.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.REVERSE);
 
+        //connect imu to measure the heading
         imu = hardwareMap.get(IMU.class, "imu");
 
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
@@ -38,11 +40,11 @@ public class DriveSubsystem {
 
     public void drive(double x, double y, double turn){
 
-        //getting angles
+        //getting the robot's current angles (in radians)
         double heading = imu.getRobotYawPitchRollAngles()
                 .getYaw(AngleUnit.RADIANS);
 
-        //joystick mvt on robot heading
+        //using robots heading for joystick mvt
         double cos = Math.cos(heading);
         double sin = Math.sin(heading);
 
@@ -62,6 +64,7 @@ public class DriveSubsystem {
         max = Math.max(max, Math.abs(backLeftPower));
         max = Math.max(max, Math.abs(backRightPower));
 
+        //if all powers are already between -1 and 1 keep unchanged
         max = Math.max(max, 1.0);
 
         //now sending power to the motors
@@ -73,20 +76,17 @@ public class DriveSubsystem {
         }
 
     public void stop(){
+        //stop all four drive motors
         frontRight.setPower(0);
         frontLeft.setPower(0);
         backRight.setPower(0);
         backLeft.setPower(0);
     }
 
-    //reset
+    //reset the robots current heading to 0
     public void resetHeading() {
         imu.resetYaw();
     }
 
 
     }
-
-
-
-

@@ -20,9 +20,6 @@ public class Teleop extends LinearOpMode {
 
     public void runOpMode() {
 
-        //create drive subsystem
-        DriveSubsystem drive = new DriveSubsystem(hardwareMap);
-
         telemetry.addLine("Ready");
         telemetry.update();
 
