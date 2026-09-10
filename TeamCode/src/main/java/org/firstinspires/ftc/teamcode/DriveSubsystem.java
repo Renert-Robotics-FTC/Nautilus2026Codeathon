@@ -38,7 +38,7 @@ public class DriveSubsystem {
 
     public void drive(double x, double y, double turn){
 
-        //getting angles and stuff
+        //getting angles
         double heading = imu.getRobotYawPitchRollAngles()
                 .getYaw(AngleUnit.RADIANS);
 
